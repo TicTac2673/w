@@ -1,255 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="color-scheme" content="dark" />
-  <title>purrr meow</title>
+  <meta charset="UTF-8">
+  <title>Coming Soon…</title>
   <style>
-    :root{
-      --bg:#0a0f0a;
-      --fg:#c8ffb8;
-      --dim:#7fb37a;
-      --accent:#9aff84;
-      --danger:#ff6b6b;
-      --font: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      --maxw: 900px;
-      --scanline-opacity: 0.06;
-      --vignette: 0.25;
-      --glow: 0 0 .25rem #8cff8c;
+    @font-face {
+      font-family: "Minecraft";
+      src: url("Minecraftia.ttf") format("truetype");
+      /* Put Minecraftia.ttf in your root dir */
     }
 
-    html,body{
-      height:100%;
-      background: radial-gradient(120% 120% at 50% 20%, #0f1b0f 0%, var(--bg) 60%);
-      color:var(--fg);
-      margin:0;
-      font-family:var(--font);
-      overflow:hidden;
-    }
-    .crt {
-      position:relative;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:1rem;
-      box-sizing:border-box;
-    }
-    .glass {
-      position:relative;
-      width:100%;
-      max-width:var(--maxw);
-      height: 90vh;
-      border:1px solid #1e2a1e;
-      box-shadow: inset 0 0 0.5rem rgba(0,0,0,.7);
-      background:#000;
-      overflow:hidden;
-      border-radius: 8px;
-    }
-    /* vignette */
-    .glass::after{
-      content:"";
-      position:absolute; inset:0;
-      pointer-events:none;
-      background: radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(0,0,0,var(--vignette)) 100%);
-      mix-blend-mode:multiply;
-    }
-    /* scanlines */
-    .glass::before{
-      content:"";
-      position:absolute; inset:0;
-      background: repeating-linear-gradient(
-          to bottom,
-          rgba(255,255,255,var(--scanline-opacity)) 0px,
-          rgba(255,255,255,var(--scanline-opacity)) 1px,
-          transparent 2px,
-          transparent 3px
-      );
-      animation: scan 6s linear infinite;
-      pointer-events:none;
-    }
-    @keyframes scan { to { transform: translateY(3px); } }
-
-    .term {
-      position:relative;
-      height:100%;
-      display:flex; flex-direction:column;
-      z-index:1;
-    }
-    .titlebar {
-      padding:.6rem .9rem;
-      border-bottom:1px solid #1e2a1e;
-      display:flex; align-items:center; gap:.6rem;
-      letter-spacing:.08em;
-      user-select:none;
-      text-transform:uppercase;
-      font-size:.8rem;
-      color:var(--dim);
-    }
-    .dot{width:.75rem; height:.75rem; border-radius:50%}
-    .r{background:#ff5f57}.y{background:#febc2e}.g{background:#28c840}
-    .titlebar .name { margin-left:.25rem; color:var(--fg) }
-    .screen {
-      flex:1;
-      padding:1rem;
-      overflow:auto;
-      line-height:1.4;
-      white-space:pre-wrap;
-      text-shadow: var(--glow);
-      text-align:left;
-    }
-    .line { display:block; }
-    .dim { color:var(--dim) }
-    .danger { color:var(--danger) }
-    .prompt { color:var(--accent) }
-
-    .inputrow {
-      display:flex; 
-      gap:.5rem; 
-      align-items:center;
-      border-top:1px solid #1e2a1e;
-      padding:.7rem 1rem;
-      position:relative;
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+      background-image: url("astolfo.png");
+      background-size: cover;
+      background-position: center;
     }
 
-    /* input field hidden but active */
-    #cmd {
-      position:absolute;
-      left:0; top:0;
-      width:100%;
-      height:100%;
-      opacity:0; /* invisible but captures input */
-      border:none;
-      outline:none;
-      background:transparent;
-      color:transparent;
-      caret-color:transparent;
-    }
-
-    #mirror {
-      white-space:pre;
-      font:inherit;
-    }
-
-    /* inline block cursor */
-    .cursor {
-      display:inline-block;
-      width:10px;
-      height:1em;
-      background:var(--accent);
-      margin-left:2px;
-      animation: blink 1s steps(1) infinite;
-      vertical-align:bottom;
-    }
-    @keyframes blink { 50% { opacity:0; } }
-
-    /* logo image */
-    .logo {
-      display:block;
-      margin: 1rem auto;
-      max-width: 420px;
-      width: 100%;
-      height:auto;
-      filter: brightness(1.05) contrast(1.05);
+    h1 {
+      font-family: "Minecraft", monospace;
+      font-size: 3rem;
+      color: white;
+      text-shadow: 4px 4px 0px #000;
     }
   </style>
 </head>
 <body>
-  <div class="crt">
-    <div class="glass">
-      <div class="term">
-        <div class="titlebar">
-          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="name">astolfo.store</span>
-        </div>
-        <div id="screen" class="screen"></div>
-        <div class="inputrow">
-          <span class="prompt">C:\\meow&gt;</span>
-          <div style="flex:1;">
-            <span id="mirror"></span><span id="cursor" class="cursor"></span>
-            <input id="cmd" type="text" autocomplete="off" spellcheck="false" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<script>
-const screen = document.getElementById('screen');
-const input  = document.getElementById('cmd');
-const mirror = document.getElementById('mirror');
-
-const STATE = {
-  siteName: 'astolfo.store',
-  socials: {
-    discord: 'fullhook',
-    youtube: 'missingjava'
-  },
-  eta: '???',
-};
-
-function print(txt="", cls="line"){
-  const el = document.createElement('div');
-  el.className = cls;
-  el.textContent = txt;
-  screen.appendChild(el);
-  screen.scrollTop = screen.scrollHeight;
-}
-
-function printHTML(html){
-  const el = document.createElement('div');
-  el.innerHTML = html;
-  screen.appendChild(el);
-  screen.scrollTop = screen.scrollHeight;
-}
-
-function boot(){
-  print('astolfoOS v1.0.0 (c) 2025');
-  print('Initializing system...');
-  print('>> COMING SOON\n');
-  printHTML(`<img src="astolfo.png" alt="astolfo.store logo" class="logo">`);
-  print('Type "help" to explore.');
-}
-
-function run(cmd){
-  print(`C:\\site> ${cmd}`);
-  switch(cmd.trim().toLowerCase()){
-    case 'help': 
-      return print("help | about | status | social | clear");
-    case 'about':
-      return print(`${STATE.siteName} is launching soon.`);
-    case 'status':
-      return print(`ETA: ${STATE.eta}`);
-    case 'social':
-      return print(`discord: ${STATE.socials.discord}\ngithub: ${STATE.socials.github}`);
-    case 'clear':
-      return screen.innerHTML='';
-    default:
-      return print(`'${cmd}' is not recognized.`);
-  }
-}
-
-/* update mirror text so cursor follows inline */
-function updateCursor(){
-  mirror.textContent = input.value;
-}
-input.addEventListener('input', updateCursor);
-input.addEventListener('focus', updateCursor);
-input.addEventListener('click', updateCursor);
-window.addEventListener('resize', updateCursor);
-
-input.addEventListener('keydown', e=>{
-  if(e.key==='Enter'){
-    run(input.value);
-    input.value='';
-    updateCursor();
-  }
-});
-
-boot();
-updateCursor();
-input.focus();
-</script>
+  <h1>Coming soon…</h1>
 </body>
 </html>
