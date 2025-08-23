@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <title>:3</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Import Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {margin:0;padding:0;box-sizing:border-box}
 
-    html,body {
+    html, body {
       height:100%;
-      font-family:Poppins,Segoe UI,sans-serif;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
       background:#000;
       color:#eee;
       overflow:hidden;
@@ -43,33 +45,35 @@
     }
 
     .content {
-      height:100%;
+      min-height:100%;
       display:flex;
       align-items:center;
       justify-content:center;
       flex-direction:column;
       padding:1rem;
+      gap:1rem;
     }
 
-    .download-btn {
+    .download-btn, .md5-btn {
       padding:1.2rem 3rem;
       background:linear-gradient(145deg,#1a1a1a,#111);
       border:none;
-      border-radius:14px;
+      border-radius:0; /* square corners */
       box-shadow:
-        0 0 40px rgba(180,180,255,.15),
-        4px 4px 12px #070707,
-        -4px -4px 12px #1a1a1a;
+        0 0 20px rgba(180,180,255,.15),
+        2px 2px 10px #070707,
+        -2px -2px 10px #1a1a1a;
       font-size:1.4rem;
       color:#eee;
       font-weight:500;
       cursor:pointer;
-      transition:all .15s ease-in-out;
+      transition:all .2s ease-in-out;
       text-decoration:none;
       position:relative;
+      overflow:hidden;
     }
 
-    .download-btn::before {
+    .download-btn::before, .md5-btn::before {
       content:"";
       position:absolute;
       top:50%;left:50%;
@@ -78,24 +82,45 @@
       height:220%;
       background:radial-gradient(circle,rgba(200,200,255,.08) 0%,rgba(0,0,0,0) 70%);
       z-index:-1;
+      transition:all .2s ease-in-out;
     }
 
-    .download-btn:hover {
-      transform:translateY(-3px) scale(1.03);
+    .download-btn:hover, .md5-btn:hover {
+      transform:translateY(-2px) scale(1.02);
       box-shadow:
-        0 0 60px rgba(200,200,255,.25),
-        6px 6px 16px #050505,
-        -6px -6px 16px #1f1f1f;
+        0 0 40px rgba(200,200,255,.25),
+        4px 4px 14px #050505,
+        -4px -4px 14px #1f1f1f;
     }
 
-    .download-btn:active {
-      transform:translateY(2px) scale(.98);
-      box-shadow:inset 3px 3px 8px #050505,inset -3px -3px 8px #1f1f1f;
+    .download-btn:active, .md5-btn:active {
+      transform:translateY(1px) scale(.98);
+      box-shadow:inset 2px 2px 8px #050505,inset -2px -2px 8px #1f1f1f;
+    }
+
+    .md5-list {
+      opacity:0;
+      max-height:0;
+      overflow:hidden;
+      text-align:center;
+      font-size:1rem;
+      line-height:1.8rem;
+      color:#ccc;
+      transform:translateY(-10px);
+      transition: all .5s cubic-bezier(0.4, 0, 0.2, 1);
+      width:100%;
+    }
+
+    .md5-list.show {
+      opacity:1;
+      max-height:500px;
+      transform:translateY(0);
+      margin-top:1rem;
     }
 
     @media(max-width:600px){
       #click-overlay span {font-size:1.2rem}
-      .download-btn {font-size:1.1rem;padding:1rem 2.2rem;border-radius:12px}
+      .download-btn, .md5-btn {font-size:1.1rem;padding:1rem 2.2rem;border-radius:0}
     }
   </style>
 </head>
@@ -106,18 +131,32 @@
 
   <div class="content">
     <a class="download-btn" href="https://www.mediafire.com/folder/w1ss2n883zg8c/Astolfo" target="_blank">Download</a>
+    <button class="md5-btn" id="toggle-md5">Show MD5 Hashes</button>
+    <div class="md5-list" id="md5-list">
+      <div>Astolfo.jar: 6d38501539e8b8d6f5c9d8116c6a45ff</div>
+      <div>libs folder: 4ec8d7f8b47eeb77abf305ccd8606e9d</div>
+      <div>start.bat: bafdf9457e8955bfb3bdee3a15bf3455</div>
+    </div>
   </div>
 
   <audio id="bg-music" src="song 6.mp3" loop></audio>
 
   <script>
-    const overlay=document.getElementById("click-overlay")
-    const music=document.getElementById("bg-music")
-    overlay.addEventListener("click",()=>{
-      music.play().catch(()=>{})
-      overlay.style.opacity="0"
-      setTimeout(()=>overlay.style.display="none",600)
-    })
+    const overlay = document.getElementById("click-overlay");
+    const music = document.getElementById("bg-music");
+    overlay.addEventListener("click", () => {
+      music.play().catch(()=>{});
+      overlay.style.opacity = "0";
+      setTimeout(()=>overlay.style.display = "none", 600);
+    });
+
+    const toggleBtn = document.getElementById("toggle-md5");
+    const md5List = document.getElementById("md5-list");
+
+    toggleBtn.addEventListener("click", () => {
+      md5List.classList.toggle("show");
+      toggleBtn.textContent = md5List.classList.contains("show") ? "Hide MD5 Hashes" : "Show MD5 Hashes";
+    });
   </script>
 </body>
 </html>
