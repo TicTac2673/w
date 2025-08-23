@@ -16,10 +16,22 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: black;
-      background-image: url("astolfo.png");
+      background: black url("astolfo.png") no-repeat center center;
       background-size: cover;
-      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dark overlay */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4); /* adjust darkness here */
+      z-index: 1;
     }
 
     h1 {
@@ -27,6 +39,8 @@
       font-size: 3rem;
       color: white;
       text-shadow: 4px 4px 0px #000;
+      position: relative;
+      z-index: 2; /* make sure text is above overlay */
     }
   </style>
 </head>
