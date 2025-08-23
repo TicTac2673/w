@@ -2,16 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>:3</title>
+  <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Import Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {margin:0;padding:0;box-sizing:border-box}
 
     html, body {
       height:100%;
-      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
       background:#000;
       color:#eee;
       overflow:hidden;
@@ -58,11 +57,8 @@
       padding:1.2rem 3rem;
       background:linear-gradient(145deg,#1a1a1a,#111);
       border:none;
-      border-radius:15; /* square corners */
-      box-shadow:
-        0 0 20px rgba(180,180,255,.15),
-        2px 2px 10px #070707,
-        -2px -2px 10px #1a1a1a;
+      border-radius:12px;
+      box-shadow: 2px 2px 8px #070707, -2px -2px 8px #1a1a1a;
       font-size:1.4rem;
       color:#eee;
       font-weight:500;
@@ -73,24 +69,9 @@
       overflow:hidden;
     }
 
-    .download-btn::before, .md5-btn::before {
-      content:"";
-      position:absolute;
-      top:50%;left:50%;
-      transform:translate(-50%,-50%);
-      width:220%;
-      height:220%;
-      background:radial-gradient(circle,rgba(200,200,255,.08) 0%,rgba(0,0,0,0) 70%);
-      z-index:-1;
-      transition:all .2s ease-in-out;
-    }
-
     .download-btn:hover, .md5-btn:hover {
       transform:translateY(-2px) scale(1.02);
-      box-shadow:
-        0 0 40px rgba(200,200,255,.25),
-        4px 4px 14px #050505,
-        -4px -4px 14px #1f1f1f;
+      box-shadow: 4px 4px 12px #050505, -4px -4px 12px #1f1f1f;
     }
 
     .download-btn:active, .md5-btn:active {
@@ -118,9 +99,29 @@
       margin-top:1rem;
     }
 
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.5;
+      z-index: 5;
+      pointer-events: none;
+      animation: fall linear infinite;
+      transition: opacity 1.5s ease-out;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) translateX(0); opacity: 0.5; }
+      80% { opacity: 0.2; }
+      100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
+    }
+
     @media(max-width:600px){
       #click-overlay span {font-size:1.2rem}
-      .download-btn, .md5-btn {font-size:1.1rem;padding:1rem 2.2rem;border-radius:0}
+      .download-btn, .md5-btn {font-size:1.1rem;padding:1rem 2.2rem;border-radius:10px}
     }
   </style>
 </head>
@@ -157,6 +158,39 @@
       md5List.classList.toggle("show");
       toggleBtn.textContent = md5List.classList.contains("show") ? "Hide MD5 Hashes" : "Show MD5 Hashes";
     });
+
+    function createSnowflake() {
+      const snowflake = document.createElement("div");
+      snowflake.classList.add("snowflake");
+      snowflake.style.left = Math.random() * window.innerWidth + "px";
+      snowflake.style.width = snowflake.style.height = (Math.random() * 6 + 6) + "px";
+      snowflake.style.animationDuration = (Math.random() * 3 + 3) + "s"; // shorter animation
+      document.body.appendChild(snowflake);
+      snowflake.addEventListener('animationend', () => {
+        snowflake.remove();
+      });
+    }
+
+    setInterval(createSnowflake, 600);
+
+    const titleText = "skid";
+    let index = 0;
+    let typing = true;
+
+    function typeTitle() {
+      if (typing) {
+        document.title = titleText.slice(0, index + 1);
+        index++;
+        if (index === titleText.length) typing = false;
+      } else {
+        document.title = titleText.slice(0, index - 1);
+        index--;
+        if (index === 0) typing = true;
+      }
+      setTimeout(typeTitle, typing ? 200 : 100);
+    }
+
+    typeTitle();
   </script>
 </body>
 </html>
