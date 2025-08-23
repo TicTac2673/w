@@ -2,49 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Coming Soon…</title>
+  <title>Download</title>
   <style>
-    @font-face {
-      font-family: "Minecraft";
-      src: url("Minecraftia.ttf") format("truetype");
-      /* Put Minecraftia.ttf in your root dir */
+    * {margin:0;padding:0;box-sizing:border-box}
+
+    html,body {
+      height:100%;
+      font-family:Poppins,Segoe UI,sans-serif;
+      background:#000;
+      color:#eee;
+      overflow:hidden;
     }
 
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: black url("astolfo.png") no-repeat center center;
-      background-size: cover;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Dark overlay */
     body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4); /* adjust darkness here */
-      z-index: 1;
+      content:"";
+      position:fixed;
+      inset:0;
+      background:radial-gradient(ellipse at center,rgba(0,0,0,0) 70%,rgba(0,0,0,.9) 100%);
+      pointer-events:none;
     }
 
-    h1 {
-      font-family: "Minecraft", monospace;
-      font-size: 3rem;
-      color: white;
-      text-shadow: 4px 4px 0px #000;
-      position: relative;
-      z-index: 2; /* make sure text is above overlay */
+    #click-overlay {
+      position:fixed;
+      inset:0;
+      background:#000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:opacity .6s ease;
+      z-index:10;
+    }
+
+    #click-overlay span {
+      font-size:1.2rem;
+      color:#aaa;
+      letter-spacing:1px;
+      opacity:.7;
+    }
+
+    .content {
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+    }
+
+    .download-btn {
+      padding:1rem 2.5rem;
+      background:linear-gradient(145deg,#1a1a1a,#111);
+      border:none;
+      border-radius:12px;
+      box-shadow:4px 4px 12px #070707,-4px -4px 12px #1a1a1a;
+      font-size:1.1rem;
+      color:#eee;
+      font-weight:500;
+      cursor:pointer;
+      transition:all .15s ease-in-out;
+      text-decoration:none;
+    }
+
+    .download-btn:hover {
+      transform:translateY(-2px);
+      box-shadow:6px 6px 16px #050505,-6px -6px 16px #1f1f1f;
+    }
+
+    .download-btn:active {
+      transform:translateY(2px);
+      box-shadow:inset 3px 3px 8px #050505,inset -3px -3px 8px #1f1f1f;
     }
   </style>
 </head>
 <body>
-  <h1>Coming soon…</h1>
+  <div id="click-overlay">
+    <span>Click anywhere to enter</span>
+  </div>
+
+  <div class="content">
+    <a class="download-btn" href="YOUR_MEDIAFIRE_LINK_HERE" target="_blank">Download</a>
+  </div>
+
+  <audio id="bg-music" src="song.mp3" loop></audio>
+
+  <script>
+    const overlay=document.getElementById("click-overlay")
+    const music=document.getElementById("bg-music")
+
+    overlay.addEventListener("click",()=>{
+      music.play().catch(()=>{})
+      overlay.style.opacity="0"
+      setTimeout(()=>overlay.style.display="none",600)
+    })
+  </script>
 </body>
 </html>
