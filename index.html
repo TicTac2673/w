@@ -78,24 +78,7 @@
     overlay.addEventListener("click",()=>{
       if(!ctx){
         ctx=new (window.AudioContext||window.webkitAudioContext)()
-        src=ctx.createMediaElementSource(music)
-
-        // Low-pass filter (muffled, like through walls)
-        filter=ctx.createBiquadFilter()
-        filter.type="lowpass"
-        filter.frequency.value=900
-        filter.Q.value=1
-
-        // Reverb-ish effect via convolver replacement: simple delay + feedback
-        delay=ctx.createDelay()
-        delay.delayTime.value=0.12
-        const feedback=ctx.createGain()
-        feedback.gain.value=0.25
-        delay.connect(feedback)
-        feedback.connect(delay)
-
-        src.connect(filter)
-        filter.connect(delay)
+        src=ctx.createMediaElementSource(
         filter.connect(ctx.destination)
         delay.connect(ctx.destination)
       }
